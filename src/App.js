@@ -34,7 +34,6 @@ class  App extends React.Component {
       if (userAuth)
       {
         const userRef = await createUserProfieDocument(userAuth)
-
         userRef.onSnapshot(snapshot =>{
           // console.log(snapshot.data());
           this.setState({
@@ -43,7 +42,6 @@ class  App extends React.Component {
               ...snapshot.data()
             }
           })
-          console.log(this.state);
         })
       }
       this.setState({
