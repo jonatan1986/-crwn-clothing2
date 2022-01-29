@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
 import HomePage from './pages/homepage/homepage.component';
@@ -61,7 +61,14 @@ class  App extends React.Component {
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route path='/shop' component={ShopPage} />
-        <Route path='/sign-in' component={SignInAndSignUpPage} />
+        <Route exact path='/sign-in' 
+        render={ () =>
+        this.props.currentUser ?
+        (<Redirect to='/' />
+        ):(
+        <SignInAndSignUpPage/>)
+
+          }/>
       </Switch>
     </div>
   );
@@ -69,10 +76,14 @@ class  App extends React.Component {
 }
 
 
+const mapStateToProps = ({user}) =>({
+  currentUser:user.currentUser
+})
+
 const mapDispathToProps = dispatch=>({
   // whatever is passed to "dispatch" in the following line is an action object that will be passed to every reducer
   // the arguments are : call back function "setCurrentUser"  and user arguments from user.action.js
   setCurrentUser:user=>dispatch(setCurrentUser(user))
 });
 
-export default connect(null,mapDispathToProps)(App);
+export default connect(mapStateToProps,mapDispathToProps)(App);
