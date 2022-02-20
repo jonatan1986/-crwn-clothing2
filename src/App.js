@@ -8,11 +8,12 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import Header  from './components/header/header.component';
-import {auth,createUserProfieDocument} from './firebase/firebase.utils';
+import {auth,createUserProfieDocument,addCollectionsAndDocuments} from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
 import {selectCurrentUser}  from './redux/user/user.selectors';
 import { createStructuredSelector } from "reselect";
+import { selectCollectionForPreview } from './redux/shop/shop.selectors';
 
 // const HatsPage = () => (
 //   <div>
@@ -55,6 +56,7 @@ class  App extends React.Component {
       //   currentUser:userAuth
       // })
       setCurrentUser(userAuth);
+      // addCollectionsAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})));
     })
   }
 
@@ -85,8 +87,10 @@ class  App extends React.Component {
 //   currentUser:user.currentUser
 // })
 
+// note - 18/2/2022 - if this function doesnt work, the once above does
 const mapStateToProps = createStructuredSelector({
   currentUser:selectCurrentUser
+  // ,collectionsArray:selectCollectionForPreview
 })
 
 const mapDispathToProps = dispatch=>({

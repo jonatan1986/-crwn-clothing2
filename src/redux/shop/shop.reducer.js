@@ -1,12 +1,19 @@
-import SHOP_DATA from "./shop.data";
+// import SHOP_DATA from "./shop.data"; // file exists but not used
+import ShopActionTypes from "./shop.types";
 
 const INITAL_STATE = {
-    collections: SHOP_DATA
+    collections: null
 }
 
  const shopReducer = (state=INITAL_STATE,action) => {
     switch(action.type){
-        default:return state;
+    case ShopActionTypes.UPDATE_COLLECTIONS:
+        return {
+            ...state,
+            collections: action.payload
+        }
+        
+    default:return state;
     }   
 }
 
