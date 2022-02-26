@@ -8,12 +8,11 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import Header  from './components/header/header.component';
-import {auth,createUserProfieDocument,addCollectionsAndDocuments} from './firebase/firebase.utils';
 import { connect } from 'react-redux';
-import { setCurrentUser } from './redux/user/user.action';
 import {selectCurrentUser}  from './redux/user/user.selectors';
 import { createStructuredSelector } from "reselect";
 import { selectCollectionForPreview } from './redux/shop/shop.selectors';
+import { checkUserSession } from './redux/user/user.actions';
 
 // const HatsPage = () => (
 //   <div>
@@ -36,28 +35,8 @@ class  App extends React.Component {
   }
 
   componentDidMount(){
-    const {setCurrentUser} = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      // this.setState({currentUser:user})
-      if (userAuth)
-      {
-        const userRef = await createUserProfieDocument(userAuth)
-        userRef.onSnapshot(snapshot =>{
-          // console.log(snapshot.data());
-          // this.setState({  //this code is not relevant for redux
-            // currentUser:{ 
-            setCurrentUser({
-              id:snapshot.id,
-              ...snapshot.data()
-          })
-        })
-      }
-      // this.setState({ //this code is not relevant for redux
-      //   currentUser:userAuth
-      // })
-      setCurrentUser(userAuth);
-      // addCollectionsAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})));
-    })
+    const {checkUserSession} = this.props;
+    checkUserSession();
   }
 
   render() {
@@ -93,10 +72,8 @@ const mapStateToProps = createStructuredSelector({
   // ,collectionsArray:selectCollectionForPreview
 })
 
-const mapDispathToProps = dispatch=>({
-  // whatever is passed to "dispatch" in the following line is an action object that will be passed to every reducer
-  // the arguments are : call back function "setCurrentUser"  and user arguments from user.action.js
-  setCurrentUser:user=>dispatch(setCurrentUser(user))
-});
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+})
 
-export default connect(mapStateToProps,mapDispathToProps)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(App);
