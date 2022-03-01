@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
@@ -20,26 +20,20 @@ import { checkUserSession } from './redux/user/user.actions';
 //   </div>
 // );
 
-class  App extends React.Component {
-  // constructor(){ // this code is not neccessary for redux
-  //   super();
-  //   this.state = {
-  //     currentUser:null
-  //   }
+const  App = ({currentUser,checkUserSession}) => {
+  
+  // unsubscribeFromAuth = null;
+
+  // componentWillUnmount(){
+  //   this.unsubscribeFromAuth();
   // }
 
-  unsubscribeFromAuth = null;
-
-  componentWillUnmount(){
-    this.unsubscribeFromAuth();
-  }
-
-  componentDidMount(){
-    const {checkUserSession} = this.props;
+  // componentDidMount(){
+  //   checkUserSession();
+  // }
+ useEffect(() => {
     checkUserSession();
-  }
-
-  render() {
+  },[checkUserSession])
   return (
     <div>
       <Header />
@@ -49,7 +43,7 @@ class  App extends React.Component {
         <Route exact path='/checkout' component={CheckoutPage} />
         <Route exact path='/sign-in' 
         render={ () =>
-        this.props.currentUser ?
+        currentUser ?
         (<Redirect to='/' />
         ):(
         <SignInAndSignUpPage/>)
@@ -59,7 +53,6 @@ class  App extends React.Component {
     </div>
   );
   }
-}
 
 
 // const mapStateToProps = ({user}) =>({
